@@ -30,6 +30,14 @@ def logout_user(request):
     if settings.CREATE_SESSION_ON_LOGIN:
         logout(request)
 
+def increment_jwt_version(user):
+    setattr(
+        user,
+        settings.JWT_VERSION_FIELD,
+        getattr(user, settings.JWT_VERSION_FIELD) + 1,
+    )
+    user.save()
+
 
 class ActionViewMixin:
     def post(self, request, **kwargs):

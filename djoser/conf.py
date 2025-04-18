@@ -41,6 +41,8 @@ default_settings = {
     "USERNAME_RESET_SHOW_EMAIL_NOT_FOUND": False,
     "PASSWORD_CHANGED_EMAIL_CONFIRMATION": False,
     "USERNAME_CHANGED_EMAIL_CONFIRMATION": False,
+    "JWT_VERSIONING": False,
+    "JWT_VERSION_FIELD": "refresh_token_version",
     "TOKEN_MODEL": "rest_framework.authtoken.models.Token",
     "SERIALIZERS": ObjDict(
         {
@@ -122,8 +124,8 @@ class Settings:
             explicit_overriden_settings = {}
 
         overriden_settings = (
-            getattr(django_settings, DJOSER_SETTINGS_NAMESPACE, {})
-            or explicit_overriden_settings
+                getattr(django_settings, DJOSER_SETTINGS_NAMESPACE, {})
+                or explicit_overriden_settings
         )
 
         self._load_default_settings()

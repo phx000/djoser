@@ -228,6 +228,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
         if settings.LOGOUT_ON_PASSWORD_CHANGE:
             utils.logout_user(self.request)
+            if settings.JWT_VERSIONING:
+                utils.increment_jwt_version(request.user)
         elif settings.CREATE_SESSION_ON_LOGIN:
             update_session_auth_hash(self.request, self.request.user)
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -254,6 +256,11 @@ class UserViewSet(viewsets.ModelViewSet):
         if hasattr(serializer.user, "last_login"):
             serializer.user.last_login = now()
         serializer.user.save()
+
+        if settings.LOGOUT_ON_PASSWORD_CHANGE:
+            utils.logout_user(self.request)
+            if settings.JWT_VERSIONING:
+                utils.increment_jwt_version(serializer.user)
 
         if settings.PASSWORD_CHANGED_EMAIL_CONFIRMATION:
             context = {"user": serializer.user}
